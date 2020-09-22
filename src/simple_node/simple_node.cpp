@@ -1,7 +1,6 @@
-/** Author(s): Kelvin Kang (kelvinkang@cmu.edu)
- *  This file is subject to the terms and conditions defined in the file 'LICENSE',
- *  which is part of this source code package
- */
+// Author(s): Kelvin Kang (kelvinkang@cmu.edu)
+// This file is subject to the terms and conditions defined in the file 'LICENSE',
+// which is part of this source code package
 
 // include in the cpp node file should only be the .h file
 // any additional include should go to .h file
@@ -18,10 +17,9 @@ SimpleNode::SimpleNode() : private_nh_("~")
   myVar4_ = 10;
 }
 
-/** convention is to put the most important function right after the constructor
- *  use comments on top of variables to explain your function
- */
-void SimpleNode::run()
+// convention is to put the most important function right after the constructor
+void SimpleNode::run(double currVel_, sensor_msgs::Imu imu,
+                  geometry_msgs::TwistWithCovarianceStamped& vehicleCmdMsg, int myVar1, double myVar4)
 {
   // do really cool and important stuff here
   double x = calcEuclDist(0.0, 0.0, 0.0, 0.0);
@@ -62,7 +60,7 @@ double SimpleNode::calcEuclDist(double x1, double x2, double y1, double y2)
 // put boiler plate ros function at the bottom
 void SimpleNode::timerCallback(const ros::TimerEvent& e)
 {
-  run();
+  run(currVel_, currImu_, vehicleCmdMsg_, myVar1_, myVar4_);
 }
 
 void SimpleNode::odomCallback(const nav_msgs::Odometry& odomMsg)

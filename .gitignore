@@ -1,5 +1,6 @@
 ######VS Code/IDE Related######
 .vscode/
+doxygen/
 
 ######ROS Related######
 devel/

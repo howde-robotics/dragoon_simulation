@@ -1,19 +1,36 @@
 #pragma once
 
-/** Explain this class plss
+/**
+ * @brief a simple PID controller
+ *
+ * Takes in a setPoint and does this
+ *
  */
 class myPidController
 {
 public:
+  /// set the respective p, i, and d gains
   myPidController(double p, double i, double d);
   ~myPidController()
   {
   }
 
+  /**
+   * @brief calculate the PID output signal
+   *
+   * @param setPoint desired set point that you want the system to go to, unitless
+   * @return double
+   */
   double calcPid(double setPoint);
 
 private:
-  double p_, i_, d_;
+  /// proportional gain, unitless
+  double p_;
+  /// integral gain, unitless
+  double i_;
+  /// differential gain, unitless
+  double d_;
+  /// the summation of the (i * error), unitless
   double i_sum_;
 };
 
