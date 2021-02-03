@@ -20,8 +20,8 @@
 #include <geometry_msgs/TwistWithCovarianceStamped.h>
 #include <tf/tf.h>
 
-// Other includes
-#include "myPidController.h"
+// Include your main algorithm class
+#include "myAlgo.h"
 
 /**
  * @brief Explain briefly what this class does, e.g. it takes in this input, does this process and output this
@@ -36,8 +36,10 @@ class SimpleNode
 {
 public:
   SimpleNode();
+  ~SimpleNode() { delete algo; }
 
 private:
+  howde::MyAlgo* algo;
   /////////////////////// State variables ///////////////////////
 
   /**
@@ -85,17 +87,6 @@ private:
    */
   void run(double currVel_, sensor_msgs::Imu imu, geometry_msgs::TwistWithCovarianceStamped& vehicleCmdMsg, int myVar1,
            double myVar4);
-
-  /**
-   * @brief takes in 2 of (x,y) pairs and calculate eucledian dist between them
-   *
-   * @param x1 normally you would explain more if it's complicated
-   * @param x2 please please specify the unit of the variables, e.g. metre or secs
-   * @param y1 hello
-   * @param y2 hihihi
-   * @return double
-   */
-  double calcEuclDist(double x1, double x2, double y1, double y2);
 
   // ROS and node related variables
   ros::NodeHandle nh_, private_nh_;

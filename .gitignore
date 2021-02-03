@@ -1,6 +1,12 @@
 ######VS Code/IDE Related######
+__pycache__/
 .vscode/
 doxygen/
+
+# Executables
+*.exe
+*.out
+*.app
 
 ######ROS Related######
 devel/

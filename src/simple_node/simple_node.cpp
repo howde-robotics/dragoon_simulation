@@ -12,6 +12,8 @@ SimpleNode::SimpleNode() : private_nh_("~")
   // put boiler plate ROS stuff in this function
   initRos();
 
+  algo = new howde::MyAlgo(myVar1_);
+
   // initialise variables if you need to and add explanation to magic numbers
   myVar3_ = 5;
   myVar4_ = 10;
@@ -22,25 +24,7 @@ void SimpleNode::run(double currVel_, sensor_msgs::Imu imu,
                   geometry_msgs::TwistWithCovarianceStamped& vehicleCmdMsg, int myVar1, double myVar4)
 {
   // do really cool and important stuff here
-  double x = calcEuclDist(0.0, 0.0, 0.0, 0.0);
-
-  // example of using enum
-  vehicleState_ = MyVehState::kStateOne;
-  switch (vehicleState_)
-  {
-    case MyVehState::kStateZero:
-      // do smth
-      break;
-    case MyVehState::kStateOne:
-      // do smth
-      break;
-    case MyVehState::kStateTwo:
-      // do smth
-      break;
-    default:
-      // do smth if none of the state is true
-      break;
-  }
+  double x = algo->run(myVar1, myVar3_);
 
   // publish the result of your calculation / algo
   vehicleCmdMsg_.twist.twist.linear.x = currVel_;
@@ -51,16 +35,10 @@ void SimpleNode::run(double currVel_, sensor_msgs::Imu imu,
   vehicleStatsPub_.publish(vehicleStatsMsg_);
 }
 
-// put your helper functions next, and write comments to explain function
-double SimpleNode::calcEuclDist(double x1, double x2, double y1, double y2)
-{
-  return 0.0;
-}
-
 // put boiler plate ros function at the bottom
 void SimpleNode::timerCallback(const ros::TimerEvent& e)
 {
-  run(currVel_, currImu_, vehicleCmdMsg_, myVar1_, myVar4_);
+  this->run(currVel_, currImu_, vehicleCmdMsg_, myVar1_, myVar4_);
 }
 
 void SimpleNode::odomCallback(const nav_msgs::Odometry& odomMsg)
