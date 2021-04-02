@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:macro name="wheel_link" params="name origin_xyz origin_rpy">
+    	<link name="${name}">
+            <inertial>
+                <mass value="0.129"/>
+                <origin rpy="${origin_rpy}" xyz="${origin_xyz}"/>
+                <inertia ixx="0.0001" iyy="0.0001" izz="0.0001" ixy="0" ixz="0" iyz="0" />
+            </inertial>
+            <collision name="${name}_collision">
+                <origin rpy="${origin_rpy}" xyz="${origin_xyz}"/>
+                <geometry>
+                    <mesh filename="package://dragoon_simulation/urdf/meshes/wheel.STL" scale="0.001 0.001 0.001"/>
+                </geometry>
+            </collision>
+            <visual name="${name}_visual">
+                <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
+                <geometry>
+                    <mesh filename="package://dragoon_simulation/urdf/meshes/wheel.STL" scale="0.001 0.001 0.001"/>
+                </geometry>
+                <material name="black"/>
+            </visual>
+        </link>
+    </xacro:macro>
+
+    <xacro:macro name="wheel_joint" params="child parent origin_xyz origin_rpy">
+    	<joint name="${child}_joint" type="continuous">
+            <origin rpy="${origin_rpy}" xyz="${origin_xyz}"/>
+            <child link="${child}"/>
+            <parent link="${parent}"/>
+            <axis rpy=" 0 0 0" xyz="0 1 0"/>
+            <limit effort="10000" velocity="1000"/>
+		    <joint_properties damping="1.0" friction="1.0"/>
+	    </joint>
+    </xacro:macro>
+</robot>
