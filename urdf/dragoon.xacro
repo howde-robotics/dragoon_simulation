@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+
+<robot name="dragoon" xmlns:xacro="http://www.ros.org/wiki/xacro">
+	<material name="orange">
+		<color rgba="1.0 0.42342 0.039215 1.0"/>
+	</material>
+	<material name="black">
+		<color rgba="0.0 0.0 0.0 1.0"/>
+	</material>
+
+	<link name="link_chassis" >
+		<!-- pose and inertial -->
+		<pose> 0 0 0.1 0 0 0 </pose>
+
+		<inertial>
+			<mass value="3.59"/>
+			<origin rpy="0 0 0" xyz="0 0.08 0" />
+			<inertia ixx="0.05" iyy="0.04" izz="0.08" ixy="0" ixz="0" iyz="0" />
+		</inertial>
+
+		<!-- collision and body mesh -->
+		<collision name="link_chassis_collision" >
+			<geometry>
+				<box size="0.4 0.2 0.1" />
+			</geometry>
+		</collision>
+
+		<visual>
+			<origin rpy="0 0 0" xyz="0 0 0" />
+			<geometry>
+				<box size="0.4 0.2 0.1"/>
+			</geometry>
+			<material name="orange"/>
+		</visual>
+	</link>
+
+
+	<link name="link_right_wheel">
+		<inertial>
+			<mass value="0.129"/>
+			<origin rpy="0 0 0" xyz="0 0 0.004"/>
+			<inertia ixx="0.0001" iyy="0.0001" izz="0.0001" ixy="0" ixz="0" iyz="0" />
+		</inertial>
+		<collision name="link_right_wheel_collision">
+			<origin rpy="0 0 0" xyz="0 0 0"/>
+			<geometry>
+				<cylinder length="0.04" radius="0.1"/>
+			</geometry>
+		</collision>
+		<visual name="link_right_wheel_visual">
+			<origin rpy="0 0 0" xyz="0 0 0" />
+			<geometry>
+				<cylinder length="0.04" radius="0.1"/>
+			</geometry>
+			<material name="black"/>
+		</visual>
+	</link>
+
+	<joint name="joint_right_wheel" type="continuous">
+		<origin rpy="0 0 0" xyz="0 -0.5 0"/>
+		<child link="link_right_wheel"/>
+		<parent link="link_chassis"/>
+		<axis rpy=" 0 0 0" xyz="0 1 0"/>
+		<limit effort="10000" velocity="1000"/>
+		<joint_properties damping="1.0" friction="1.0"/>
+	</joint>
+
+	<link name="link_left_wheel">
+		<inertial>
+			<mass value="0.129"/>
+			<origin rpy="0 0 0" xyz="0 0 0.004"/>
+			<inertia ixx="0.0001" iyy="0.0001" izz="0.0001" ixy="0" ixz="0" iyz="0" />
+		</inertial>
+		<collision name="link_left_wheel_collision">
+			<origin rpy="0 0 0" xyz="0 0 0"/>
+			<geometry>
+				<cylinder length="0.04" radius="0.1"/>
+			</geometry>
+		</collision>
+		<visual name="link_left_wheel_visual">
+			<origin rpy="0 0 0" xyz="0 0 0" />
+			<geometry>
+				<cylinder length="0.04" radius="0.1"/>
+			</geometry>
+			<material name="black"/>
+		</visual>
+	</link>
+
+	<joint name="joint_left_wheel" type="continuous">
+		<origin rpy="0 0 0" xyz="0 0.5 0"/>
+		<child link="link_left_wheel"/>
+		<parent link="link_chassis"/>
+		<axis rpy=" 0 0 0" xyz="0 1 0"/>
+		<limit effort="10000" velocity="1000"/>
+		<joint_properties damping="1.0" friction="1.0"/>
+	</joint>
+
+	<gazebo>	
+		<plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+			<robotNamespace>/</robotNamespace>
+		</plugin>
+	</gazebo>
+</robot>
