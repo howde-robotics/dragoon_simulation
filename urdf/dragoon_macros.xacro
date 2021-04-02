@@ -11,15 +11,14 @@
             <collision name="${name}_collision">
                 <origin rpy="${origin_rpy}" xyz="${origin_xyz}"/>
                 <geometry>
-                    <mesh filename="package://dragoon_simulation/urdf/meshes/wheel.STL" scale="0.001 0.001 0.001"/>
+                    <mesh filename="package://dragoon_simulation/urdf/meshes/wheel.STL" scale="1 1 1"/>
                 </geometry>
             </collision>
             <visual name="${name}_visual">
                 <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
                 <geometry>
-                    <mesh filename="package://dragoon_simulation/urdf/meshes/wheel.STL" scale="0.001 0.001 0.001"/>
+                    <mesh filename="package://dragoon_simulation/urdf/meshes/wheel.dae" scale="1 1 1"/>
                 </geometry>
-                <material name="black"/>
             </visual>
         </link>
     </xacro:macro>
