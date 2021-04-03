@@ -234,3 +234,6 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
+
+# large files
+dragoon_base.dae
