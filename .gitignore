@@ -235,6 +235,6 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
-# large files
+# large files so can't push to github, ask bkolligs@andrew.cmu.edu for these
 meshes/dragoon_base.dae
 gazebo_model/dragoon/meshes/dragoon_base.dae
