@@ -24,14 +24,14 @@
 		<!-- collision and body mesh -->
 		<collision name="link_chassis_collision" >
 			<geometry>
-				<mesh filename="package://dragoon_simulation/urdf/meshes/dragoon_base.dae" scale="1 1 1"/>
+				<mesh filename="package://dragoon_simulation/meshes/dragoon_base.dae" scale="1 1 1"/>
 			</geometry>
 		</collision>
 
 		<visual>
 			<origin rpy="0 0 0" xyz="0 0 0" />
 			<geometry>
-				<mesh filename="package://dragoon_simulation/urdf/meshes/dragoon_base.dae" scale="1 1 1"/>
+				<mesh filename="package://dragoon_simulation/meshes/dragoon_base.dae" scale="1 1 1"/>
 			</geometry>
 			<material name="orange"/>
 		</visual>
