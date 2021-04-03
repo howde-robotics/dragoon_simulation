@@ -1,13 +1,10 @@
 <launch>
 
-  	<param name="robot_description" command="$(find xacro)/xacro '$(find dragoon_simulation)/urdf/dragoon.xacro'"/>
-
-
   <!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="world_name" value="$(find dragoon_simulation)/worlds/dragoon.world"/>
     <!-- more default parameters can be changed here -->
   </include>
 
-  <node name="spawn_model" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model dragoon"/>
+  <node name="spawn_model" pkg="gazebo_ros" type="spawn_model" args="-file $(find dragoon_simulation)/gazebo_model/dragoon/model.sdf -sdf -model dragoon"/>
 </launch>
