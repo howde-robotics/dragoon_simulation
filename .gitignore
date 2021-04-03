@@ -236,4 +236,5 @@ dmypy.json
 cython_debug/
 
 # large files
-dragoon_base.dae
+meshes/dragoon_base.dae
+gazebo_model/dragoon/meshes/dragoon_base.dae
