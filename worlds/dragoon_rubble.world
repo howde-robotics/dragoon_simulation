@@ -89,7 +89,7 @@
       <elevation>0</elevation>
       <heading_deg>0</heading_deg>
     </spherical_coordinates>
-    <model name='dragoon'>
+    <!-- <model name='dragoon'>
       <link name='chassis'>
         <pose frame=''>0 0 0 0 -0 0</pose>
         <inertial>
@@ -416,7 +416,7 @@
         </axis>
       </joint>
       <pose frame=''>-0.049392 0.005018 0 0 -0 0</pose>
-    </model>
+    </model> -->
     <model name='cinder_block'>
       <link name='link'>
         <inertial>
@@ -2931,5 +2931,7 @@
         <projection_type>perspective</projection_type>
       </camera>
     </gui>
+
+    <plugin name="dragoon_gazebo" filename="libdragoon_simulation.so"/>
   </world>
 </sdf>
