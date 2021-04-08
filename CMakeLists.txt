@@ -1,6 +1,17 @@
 cmake_minimum_required(VERSION 3.10.2)
-project(dragoon_simulation VERSION 0.0.1)
-set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-std=c++17 -pthread")
+project(dragoon_simulation)
+
+# Check for c++11 / c++0x support
+include(CheckCXXCompilerFlag)
+CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
+CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
+if(COMPILER_SUPPORTS_CXX11)
+    set(CMAKE_CXX_FLAGS "-std=c++11")
+elseif(COMPILER_SUPPORTS_CXX0X)
+    set(CMAKE_CXX_FLAGS "-std=c++0x")
+else()
+    message(FATAL_ERROR "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
+endif()
 
 find_package(catkin REQUIRED COMPONENTS
   roscpp
@@ -13,10 +24,7 @@ find_package(catkin REQUIRED COMPONENTS
   actionlib_msgs
   urdf
   dragoon_messages
-)
-
-generate_messages(
-  DEPENDENCIES actionlib_msgs std_msgs
+  gazebo_ros
 )
 
 catkin_package(CATKIN_DEPENDS
@@ -28,19 +36,26 @@ catkin_package(CATKIN_DEPENDS
   tf
   actionlib_msgs
   dragoon_messages
+  gazebo_ros
 )
-
 include_directories(
-  ${catkin_INCLUDE_DIRS}
+  ${Boost_INCLUDE_DIR} 
+  ${catkin_INCLUDE_DIRS} 
+  ${GAZEBO_INCLUDE_DIRS}
   include
-)
+  )
+# Load catkin and all dependencies required for this package
 
-# add executables from your source code, i.e. compile it
-# .py code are not included here as they do not need to be compiled
-# add_executable(simple_node 
-#   src/simple_node/simple_node.cpp
-# )
-# add_library(myAlgo src/myAlgo.cpp)
+# Depend on system install of Gazebo
+find_package(gazebo REQUIRED)
+
+link_directories(${GAZEBO_LIBRARY_DIRS})
+include_directories(${Boost_INCLUDE_DIR} ${catkin_INCLUDE_DIRS} ${GAZEBO_INCLUDE_DIRS})
+
+# add gazebo plugin as library for the node 
+add_library(${PROJECT_NAME} src/gazebo_api/gazebo_api.cpp)
+target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
+
 
 # if(CATKIN_ENABLE_TESTING)
 
