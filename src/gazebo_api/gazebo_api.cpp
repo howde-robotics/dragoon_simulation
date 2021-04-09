@@ -18,11 +18,6 @@ namespace gazebo
         {
             // Store the pointer to the model
             this->model = _parent;
-
-            // Listen to the update event. This event is broadcast every
-            // simulation iteration.
-            // this->updateConnection = event::Events::ConnectWorldUpdateBegin(
-            //     std::bind(&DragoonGazebo::OnUpdate, this));
                 
             ROS_INFO_STREAM("Dragoon Gazebo API loaded. Connected to: [" << this->model->GetName() << "]\n");
 
@@ -77,21 +72,6 @@ namespace gazebo
             }
         }
 
-        // Called by the world update start event
-        // void OnUpdate()
-        // {
-            // Apply a small linear velocity to the model.
-            // this->model->SetLinearVel(ignition::math::Vector3d(.3, 0, 0));
-
-            // // retrieve joints
-            // this->joint = this->model->GetJoint("wheel_4_RB_revolute");
-            // // set PID
-            // this->pid = common::PID(0.1, 10, 0);
-
-            // // apply P-controller to the joint
-            // this->model->GetJointController()->SetVelocityPID(this->joint->GetScopedName(), this->pid);
-            // this->model->GetJointController()->SetVelocityTarget(this->joint->GetScopedName(), 0.1);
-        // }
 
     private: 
         // Pointer to the model
