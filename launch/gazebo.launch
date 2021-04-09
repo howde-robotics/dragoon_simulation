@@ -7,5 +7,9 @@
     <arg name="verbose" value="true"/>
   </include>
 
+  <param name="prop_gain" value="1.0" type="double"/>
+  <param name="der_gain" value="10.0" type="double"/>
+  <param name="int_gain" value="0.0" type="double"/>
+
   <node name="spawn_model" pkg="gazebo_ros" type="spawn_model" args="-file $(find dragoon_simulation)/gazebo_model/dragoon/model.sdf -sdf -model dragoon"/>
 </launch>

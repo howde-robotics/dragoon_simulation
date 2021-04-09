@@ -8,6 +8,7 @@
 #include "ros/callback_queue.h"
 #include "ros/subscribe_options.h"
 #include "std_msgs/Float32MultiArray.h"
+#include "geometry_msgs/PoseStamped.h"
 
 namespace gazebo
 {
@@ -16,8 +17,21 @@ namespace gazebo
     public: 
         void Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf)
         {
+            double propGain = 1.0;
+            double derGain = 10.0;
+            double intGain = 0.0;
+
+            ros::param::get("prop_gain", propGain);
+            ros::param::get("der_gain", derGain);
+            ros::param::get("int_gain", intGain);
+
             // Store the pointer to the model
             this->model = _parent;
+
+            // Listen to the update event. This event is broadcast every
+            // simulation iteration.
+            this->updateConnection = event::Events::ConnectWorldUpdateBegin(
+                std::bind(&DragoonGazebo::OnUpdate, this));
                 
             ROS_INFO_STREAM("Dragoon Gazebo API loaded. Connected to: [" << this->model->GetName() << "]\n");
 
@@ -27,11 +41,6 @@ namespace gazebo
                 ros::init(argc, argv, "gazebo_client", ros::init_options::NoSigintHandler);
             }
 
-            // collect joints
-            this->joints = this->model->GetJoints();
-            // set pid
-            this->pid = common::PID(1, 10, 0);
-
             // create the ros node
             this->rosNode.reset(new ros::NodeHandle("gazebo_client"));
 
@@ -40,6 +49,17 @@ namespace gazebo
             this->jointSub = this->rosNode->subscribe(so);
 
             this->rosQueueThread = std::thread(std::bind(&DragoonGazebo::queueThread, this));
+
+            this->posePub = this->rosNode->advertise<geometry_msgs::PoseStamped>("/dragoon/pose", 10);
+
+            // collect joints
+            this->joints = this->model->GetJoints();
+            // set pid
+
+            this->pid = common::PID(propGain, derGain, intGain);
+
+
+        
         }
 
         void jointCallback(const std_msgs::Float32MultiArrayConstPtr &msg)
@@ -72,12 +92,31 @@ namespace gazebo
             }
         }
 
+        // Called by the world update start event
+        void OnUpdate()
+        {
+            geometry_msgs::PoseStamped poseOut;
+            // publish robot pose
+            this->pose = this->model->WorldPose();
+            ignition::math::Vector3d pos = this->pose.Pos();
+            ignition::math::Quaterniond rot = this->pose.Rot();
+            poseOut.pose.position.x = pos.X();
+            poseOut.pose.position.y = pos.Y();
+            poseOut.pose.position.z = pos.Z();
+            poseOut.pose.orientation.x = rot.X();
+            poseOut.pose.orientation.y = rot.Y();
+            poseOut.pose.orientation.z = rot.Z();
+            poseOut.pose.orientation.w = rot.W();
+            this->posePub.publish(poseOut);
+        }
+
 
     private: 
         // Pointer to the model
         physics::ModelPtr model;
         physics::Joint_V joints;
         common::PID pid;
+        ignition::math::Pose3d pose;
 
         // Pointer to the update event connection
         event::ConnectionPtr updateConnection;
@@ -93,6 +132,9 @@ namespace gazebo
 
         // thread that runs the rosQueue
         std::thread rosQueueThread;
+
+        // publish the pose
+        ros::Publisher posePub;
         
   };
 
