@@ -268,5 +268,7 @@
 				</dynamics>
 			</axis>
 		</joint>
+
+		<plugin name="dragoon_gazebo" filename="libdragoon_simulation.so"/>
 	</model>
 </sdf>

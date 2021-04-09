@@ -4,6 +4,7 @@
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="world_name" value="$(find dragoon_simulation)/worlds/dragoon_rubble.world"/>
     <!-- more default parameters can be changed here -->
+    <arg name="verbose" value="true"/>
   </include>
 
   <node name="spawn_model" pkg="gazebo_ros" type="spawn_model" args="-file $(find dragoon_simulation)/gazebo_model/dragoon/model.sdf -sdf -model dragoon"/>
