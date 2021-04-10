@@ -43,13 +43,6 @@ class MarkerNode {
             dragoonMarker_.pose.orientation.y = 0;
             dragoonMarker_.pose.orientation.z = 0;
             dragoonMarker_.pose.orientation.w = 1;
-            // dragoonMarker_.pose.position.x = transform_.transform.translation.x;
-            // dragoonMarker_.pose.position.y = transform_.transform.translation.y;
-            // dragoonMarker_.pose.position.z = transform_.transform.translation.z;
-            // dragoonMarker_.pose.orientation.x = transform_.transform.rotation.x;
-            // dragoonMarker_.pose.orientation.y = transform_.transform.rotation.y;
-            // dragoonMarker_.pose.orientation.z = transform_.transform.rotation.z;
-            // dragoonMarker_.pose.orientation.w = transform_.transform.rotation.w;
             dragoonMarker_.scale.x = 1.0;
             dragoonMarker_.scale.y = 1.0;
             dragoonMarker_.scale.z = 1.0;
@@ -58,7 +51,7 @@ class MarkerNode {
             dragoonMarker_.color.g = 94/255;
             dragoonMarker_.color.b = 19/255;
             // use the dragoon mesh
-            dragoonMarker_.mesh_resource = "package://dragoon_simulation/meshes/dragoon_base.dae";
+            dragoonMarker_.mesh_resource = "package://dragoon_simulation/meshes/dragoon_base_full.dae";
             markerPub_.publish(dragoonMarker_);
         }
 

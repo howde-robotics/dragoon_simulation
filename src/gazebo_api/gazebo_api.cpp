@@ -194,9 +194,6 @@ namespace gazebo
             outEncoders.data = values;
             odomPub.publish(outEncoders);
         }
-
-
-
         
   };
 

@@ -23,7 +23,7 @@
 				<pose> 0 0 0 0 0 0</pose>
 				<geometry>
 					<mesh>	
-						<uri> model://dragoon/meshes/dragoon_base.STL</uri>
+						<uri> model://dragoon/meshes/collision_base.STL</uri>
 					</mesh>
 				</geometry>
 			</collision>
@@ -53,8 +53,8 @@
 
 						<!-- The horizontal beams -->
 						<horizontal>
-						<!-- The velodyne has 32 beams(samples) -->
-							<samples>1875</samples>
+						<!-- The velodyne has 16 beams(samples) -->
+							<samples>500</samples>
 
 							<!-- Resolution is multiplied by samples to determine number of
 								simulated beams vs interpolated beams. See:
