@@ -7,7 +7,8 @@
 	<!-- launch gazebo using an empty world launch file-->
 	<include file="$(find gazebo_ros)/launch/empty_world.launch">
 		<!-- <arg name="world_name" value="$(find dragoon_simulation)/worlds/dragoon_rubble.world"/> -->
-		<arg name="world_name" value="$(find dragoon_simulation)/worlds/dragoon.world"/>
+		<!-- <arg name="world_name" value="$(find dragoon_simulation)/worlds/dragoon_gas.world"/> -->
+		<arg name="world_name" value="$(find dragoon_simulation)/worlds/dragoon_training.world"/>
 		<arg name="verbose" value="true"/>
 	</include>
 
