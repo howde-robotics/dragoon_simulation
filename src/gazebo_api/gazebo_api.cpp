@@ -17,6 +17,35 @@ namespace gazebo
 {
   class DragoonGazebo : public ModelPlugin
   {
+    private: 
+        // Pointer to the model
+        physics::ModelPtr model;
+        physics::Joint_V joints;
+        common::PID pid;
+        ignition::math::Pose3d pose;
+
+        // Pointer to the update event connection
+        event::ConnectionPtr updateConnection;
+
+        // ROS interface
+        std::unique_ptr<ros::NodeHandle> rosNode;
+
+        // subscriber to the joint value topic
+        ros::Subscriber jointSub;
+
+        // callback queue
+        ros::CallbackQueue rosQueue;
+
+        // thread that runs the rosQueue
+        std::thread rosQueueThread;
+
+        // publish the pose and encoders
+        ros::Publisher posePub, odomPub;
+
+        // transform broadcaster
+        tf2_ros::TransformBroadcaster br;
+
+
     public: 
         void Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf)
         {
@@ -54,6 +83,7 @@ namespace gazebo
             this->rosQueueThread = std::thread(std::bind(&DragoonGazebo::queueThread, this));
 
             this->posePub = this->rosNode->advertise<geometry_msgs::PoseStamped>("/dragoon/pose", 10);
+            this->odomPub = this->rosNode->advertise<std_msgs::Float32MultiArray>("/dragoon/odom", 10);
 
             // collect joints
             this->joints = this->model->GetJoints();
@@ -152,36 +182,21 @@ namespace gazebo
             transform.transform.rotation.w = rot.W();
             this->br.sendTransform(transform);
 
+            // encoder publish the left top and the right bottom wheel
+            std_msgs::Float32MultiArray outEncoders;
+            std::vector<float> values;
+            // returns joint position in radians
+            values.push_back(this->model->GetJoint("wheel_1_LF_revolute")->Position());
+            values.push_back(this->model->GetJoint("wheel_4_RB_revolute")->Position());
+            values.push_back(this->model->GetJoint("wheel_4_RB_revolute")->GetVelocity(0));
+            values.push_back(this->model->GetJoint("wheel_4_RB_revolute")->GetVelocity(0));
+
+            outEncoders.data = values;
+            odomPub.publish(outEncoders);
         }
 
 
-    private: 
-        // Pointer to the model
-        physics::ModelPtr model;
-        physics::Joint_V joints;
-        common::PID pid;
-        ignition::math::Pose3d pose;
 
-        // Pointer to the update event connection
-        event::ConnectionPtr updateConnection;
-
-        // ROS interface
-        std::unique_ptr<ros::NodeHandle> rosNode;
-
-        // subscriber to the joint value topic
-        ros::Subscriber jointSub;
-
-        // callback queue
-        ros::CallbackQueue rosQueue;
-
-        // thread that runs the rosQueue
-        std::thread rosQueueThread;
-
-        // publish the pose
-        ros::Publisher posePub;
-
-        // transform broadcaster
-        tf2_ros::TransformBroadcaster br;
         
   };
 
