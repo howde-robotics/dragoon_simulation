@@ -27,7 +27,6 @@ namespace gazebo
             ros::param::get("prop_gain", propGain);
             ros::param::get("der_gain", derGain);
             ros::param::get("int_gain", intGain);
-            ros::param::get("lidar_rate", this->lidarSpeed);
 
             // Store the pointer to the model
             this->model = _parent;
@@ -162,7 +161,6 @@ namespace gazebo
         physics::Joint_V joints;
         common::PID pid;
         ignition::math::Pose3d pose;
-        double lidarSpeed;
 
         // Pointer to the update event connection
         event::ConnectionPtr updateConnection;
