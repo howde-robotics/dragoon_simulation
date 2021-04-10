@@ -89,9 +89,9 @@ namespace gazebo
             {
                 
                 physics::JointPtr joint = this->joints[i];
-                ROS_INFO_STREAM(joint->GetName());
+                // ROS_INFO_STREAM(joint->GetName());
                 if (joint->GetName() == "lidar_revolute"){
-                    joint->SetVelocity(0, this->lidarSpeed);
+                    joint->SetVelocity(0, 0.0);
                 }
                 else {
                     double speed = speeds[i];
@@ -143,7 +143,7 @@ namespace gazebo
             // publish lidar joint transform
             transformLIDAR.header.stamp = ros::Time::now();
             transform.header.frame_id = "world";
-            transform.child_frame_id = "lidar_beam";
+            transform.child_frame_id = "lidar";
             transform.transform.translation.x = pos.X();
             transform.transform.translation.y = pos.Y();
             transform.transform.translation.z = pos.Z();

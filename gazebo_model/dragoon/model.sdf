@@ -42,8 +42,8 @@
 			<pose> 0 0 0.2 0 0 0</pose>
 			
 			<sensor type="ray" name="VLP-16">
-				<pose> 0 0 0.0 1.5707 0 0 </pose>
-				<visualize> true </visualize>
+				<pose> 0 0 0 0 0 0 </pose>
+				<visualize> false</visualize>
 				<update_rate>30</update_rate>
 				<ray>
 
@@ -54,7 +54,7 @@
 						<!-- The horizontal beams -->
 						<horizontal>
 						<!-- The velodyne has 32 beams(samples) -->
-							<samples>16</samples>
+							<samples>1875</samples>
 
 							<!-- Resolution is multiplied by samples to determine number of
 								simulated beams vs interpolated beams. See:
@@ -63,11 +63,18 @@
 							<resolution>1</resolution>
 
 							<!-- Minimum angle in radians -->
-							<min_angle>-0.26</min_angle>
+							<min_angle>-3.14159</min_angle>
 
 							<!-- Maximum angle in radians -->
-							<max_angle>0.26</max_angle>
+							<max_angle>3.14159</max_angle>
 						</horizontal>
+
+						<vertical>
+							<samples>16</samples>
+							<resolution>1</resolution>
+							<min_angle>-0.26</min_angle>
+							<max_angle> 0.26</max_angle>
+						</vertical>
 					</scan>
 
 					<!-- Range defines characteristics of an individual beam -->
@@ -80,25 +87,31 @@
 						<max>70</max>
 
 						<!-- Linear resolution of the beam -->
-						<resolution>0.02</resolution>
+						<resolution>0.001</resolution>
 					</range>
 
 					<noise>
 						<type> gaussian </type>
 						<mean> 0.0 </mean>
-						<stddev>0.001</stddev>
+						<stddev>0.005</stddev>
 					</noise>
 				</ray>
+
+				<plugin name="gazebo_ros_laser_controller" filename="libgazebo_ros_velodyne_laser.so">
+					<topicName>/gazebo_api/lidar</topicName>
+					<frameName>lidar</frameName>
+					<organize_cloud>false</organize_cloud>
+					<min_range>0.12</min_range>
+					<max_range>70</max_range>
+					<gaussianNoise>0.005</gaussianNoise>
+				</plugin>
 			</sensor>
 		</link>
 
-		<joint type="revolute" name="lidar_revolute">
+		<joint type="fixed" name="lidar_revolute">
 			<pose> 0 0 0 0 0 0</pose>
 			<child> lidar </child>
 			<parent> chassis </parent>
-			<axis>
-				<xyz> 0 0 1 </xyz>	
-			</axis>
 		</joint>
 		
 		<!-- now to list the wheels -->
