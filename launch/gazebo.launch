@@ -15,4 +15,5 @@
   <node name="spawn_model" pkg="gazebo_ros" type="spawn_model" args="-file $(find dragoon_simulation)/gazebo_model/dragoon/model.sdf -sdf -model dragoon"/>
 
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(find dragoon_simulation)/rviz/dragoon.rviz" />
+  <node name="marker_node" pkg="dragoon_simulation" type="marker_node"/>
 </launch>

@@ -57,7 +57,7 @@ add_library(${PROJECT_NAME} src/gazebo_api/gazebo_api.cpp)
 target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
 
 add_executable(marker_node src/marker_draw/markers.cpp)
-target_link_libraries(marker_node ${catkin_LIBARIES})
+target_link_libraries(marker_node ${catkin_LIBRARIES})
 
 # if(CATKIN_ENABLE_TESTING)
 
