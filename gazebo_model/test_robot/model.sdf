@@ -48,6 +48,31 @@
             </sphere>
           </geometry>
         </visual>
+
+              <sensor type="ray" name="lidar_left">
+        <pose>0.11069 0.33 0.2267 1.57 0 1.57</pose>
+        <visualize>true</visualize>
+        <update_rate>100</update_rate>
+        <ray>
+          <scan>
+            <horizontal>
+              <samples>1</samples>
+              <resolution>1</resolution>
+              <min_angle>0</min_angle>
+              <max_angle>0</max_angle>
+            </horizontal>
+          </scan>
+          <range>
+            <min>0.05</min>
+            <max>5</max>
+            <resolution>0.02</resolution>
+          </range>
+        </ray>
+        <plugin name="gazebo_ros_head_hokuyo_controller" filename="libgazebo_ros_laser.so">
+          <topicName>/gazebo_api/lidar_left</topicName>
+          <frameName>lidar_left</frameName>
+        </plugin>
+      </sensor>
       </link>
       <link name="left_wheel">
         <pose>0.1 0.13 0.1 0 1.5707 1.5707</pose>
@@ -105,5 +130,7 @@
           <xyz>0 1 0</xyz>
         </axis>
       </joint>
+
+
       </model>
     </sdf>

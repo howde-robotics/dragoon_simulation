@@ -20,11 +20,11 @@
 
 			<!-- collision is a block -->
 			<collision name='collision'>
-				<pose> -0.01 0 0.12 0 0 0</pose>
+				<pose> 0 0 0 0 0 0</pose>
 				<geometry>
-					<box>
-						<size> 0.4 0.2 0.24 </size>
-					</box>
+					<mesh>	
+						<uri> model://dragoon/meshes/dragoon_base.STL</uri>
+					</mesh>
 				</geometry>
 			</collision>
 
@@ -35,7 +35,84 @@
 					</mesh>
 				</geometry>
 			</visual>
+
 		</link>
+
+		<link name="lidar">
+			<pose> 0 0 0.2 0 0 0</pose>
+			
+			<sensor type="ray" name="VLP-16">
+				<pose> 0 0 0 0 0 0 </pose>
+				<visualize> false</visualize>
+				<update_rate>30</update_rate>
+				<ray>
+
+					<!-- The scan element contains the horizontal and vertical beams.
+					We are leaving out the vertical beams for this tutorial. -->
+					<scan>
+
+						<!-- The horizontal beams -->
+						<horizontal>
+						<!-- The velodyne has 32 beams(samples) -->
+							<samples>1875</samples>
+
+							<!-- Resolution is multiplied by samples to determine number of
+								simulated beams vs interpolated beams. See:
+								http://sdformat.org/spec?ver=1.6&elem=sensor#horizontal_resolution
+								-->
+							<resolution>1</resolution>
+
+							<!-- Minimum angle in radians -->
+							<min_angle>-3.14159</min_angle>
+
+							<!-- Maximum angle in radians -->
+							<max_angle>3.14159</max_angle>
+						</horizontal>
+
+						<vertical>
+							<samples>16</samples>
+							<resolution>1</resolution>
+							<min_angle>-0.26</min_angle>
+							<max_angle> 0.26</max_angle>
+						</vertical>
+					</scan>
+
+					<!-- Range defines characteristics of an individual beam -->
+					<range>
+
+						<!-- Minimum distance of the beam -->
+						<min>0.12</min>
+
+						<!-- Maximum distance of the beam -->
+						<max>70</max>
+
+						<!-- Linear resolution of the beam -->
+						<resolution>0.001</resolution>
+					</range>
+
+					<noise>
+						<type> gaussian </type>
+						<mean> 0.0 </mean>
+						<stddev>0.005</stddev>
+					</noise>
+				</ray>
+
+				<plugin name="gazebo_ros_laser_controller" filename="libgazebo_ros_velodyne_laser.so">
+					<topicName>/gazebo_api/lidar</topicName>
+					<frameName>lidar</frameName>
+					<organize_cloud>false</organize_cloud>
+					<min_range>0.12</min_range>
+					<max_range>70</max_range>
+					<gaussianNoise>0.005</gaussianNoise>
+				</plugin>
+			</sensor>
+		</link>
+
+		<joint type="fixed" name="lidar_revolute">
+			<pose> 0 0 0 0 0 0</pose>
+			<child> lidar </child>
+			<parent> chassis </parent>
+		</joint>
 		
 		<!-- now to list the wheels -->
 		<link name="wheel_1_LF">
@@ -268,50 +345,6 @@
 				</dynamics>
 			</axis>
 		</joint>
-
-		<sensor type="ray" name="VLP-16">
-			<pose> 0 0 1 0 0 0 </pose>
-			<visualize> true </visualize>
-			<update_rate>30</update_rate>
-			<ray>
-
-  				<!-- The scan element contains the horizontal and vertical beams.
-       			We are leaving out the vertical beams for this tutorial. -->
-  				<scan>
-
-    			<!-- The horizontal beams -->
-				<horizontal>
-				<!-- The velodyne has 32 beams(samples) -->
-					<samples>32</samples>
-
-					<!-- Resolution is multiplied by samples to determine number of
-						simulated beams vs interpolated beams. See:
-						http://sdformat.org/spec?ver=1.6&elem=sensor#horizontal_resolution
-						-->
-					<resolution>1</resolution>
-
-					<!-- Minimum angle in radians -->
-					<min_angle>-0.53529248</min_angle>
-
-					<!-- Maximum angle in radians -->
-					<max_angle>0.18622663</max_angle>
-				</horizontal>
-				</scan>
-
-			<!-- Range defines characteristics of an individual beam -->
-			<range>
-
-				<!-- Minimum distance of the beam -->
-				<min>0.05</min>
-
-				<!-- Maximum distance of the beam -->
-				<max>70</max>
-
-				<!-- Linear resolution of the beam -->
-				<resolution>0.02</resolution>
-			</range>
-			</ray>
-		</sensor>
 
 		<plugin name="dragoon_gazebo" filename="libdragoon_simulation.so"/>
 	</model>

@@ -7,8 +7,11 @@
 #include <thread>
 #include "ros/callback_queue.h"
 #include "ros/subscribe_options.h"
+
 #include "std_msgs/Float32MultiArray.h"
 #include "geometry_msgs/PoseStamped.h"
+#include "tf2_geometry_msgs/tf2_geometry_msgs.h"
+#include "tf2_ros/transform_broadcaster.h"
 
 namespace gazebo
 {
@@ -24,6 +27,7 @@ namespace gazebo
             ros::param::get("prop_gain", propGain);
             ros::param::get("der_gain", derGain);
             ros::param::get("int_gain", intGain);
+            ros::param::get("lidar_rate", this->lidarSpeed);
 
             // Store the pointer to the model
             this->model = _parent;
@@ -80,14 +84,21 @@ namespace gazebo
         // set joint of one wheel for testing
         void setVelocity(std::vector<float> speeds)
         {
-
+            // lidar joint is first, then wheel joints
             for (int i = 0; i < (int) this->joints.size();i++)
             {
+                
                 physics::JointPtr joint = this->joints[i];
-                double speed = speeds[i];
-                // apply P-controller to the joint
-                this->model->GetJointController()->SetVelocityPID(joint->GetScopedName(), this->pid);
-                this->model->GetJointController()->SetVelocityTarget(joint->GetScopedName(), speed);
+                // ROS_INFO_STREAM(joint->GetName());
+                if (joint->GetName() == "lidar_revolute"){
+                    joint->SetVelocity(0, 0.0);
+                }
+                else {
+                    double speed = speeds[i];
+                    // apply P-controller to the joint
+                    this->model->GetJointController()->SetVelocityPID(joint->GetScopedName(), this->pid);
+                    this->model->GetJointController()->SetVelocityTarget(joint->GetScopedName(), speed);
+                }
 
             }
         }
@@ -96,6 +107,9 @@ namespace gazebo
         void OnUpdate()
         {
             geometry_msgs::PoseStamped poseOut;
+            geometry_msgs::TransformStamped transform;
+            geometry_msgs::TransformStamped transformLIDAR;
+
             // publish robot pose
             this->pose = this->model->WorldPose();
             ignition::math::Vector3d pos = this->pose.Pos();
@@ -108,6 +122,37 @@ namespace gazebo
             poseOut.pose.orientation.z = rot.Z();
             poseOut.pose.orientation.w = rot.W();
             this->posePub.publish(poseOut);
+
+            // publish transform
+            transform.header.stamp = ros::Time::now();
+            transform.header.frame_id = "world";
+            transform.child_frame_id = "dragoon_body";
+            transform.transform.translation.x = pos.X();
+            transform.transform.translation.y = pos.Y();
+            transform.transform.translation.z = pos.Z();
+            transform.transform.rotation.x = rot.X();
+            transform.transform.rotation.y = rot.Y();
+            transform.transform.rotation.z = rot.Z();
+            transform.transform.rotation.w = rot.W();
+            this->br.sendTransform(transform);
+
+            ignition::math::Pose3d lidarPose = this->joints[0]->WorldPose();
+            pos = lidarPose.Pos();
+            rot = lidarPose.Rot();
+
+            // publish lidar joint transform
+            transformLIDAR.header.stamp = ros::Time::now();
+            transform.header.frame_id = "world";
+            transform.child_frame_id = "lidar";
+            transform.transform.translation.x = pos.X();
+            transform.transform.translation.y = pos.Y();
+            transform.transform.translation.z = pos.Z();
+            transform.transform.rotation.x = rot.X();
+            transform.transform.rotation.y = rot.Y();
+            transform.transform.rotation.z = rot.Z();
+            transform.transform.rotation.w = rot.W();
+            this->br.sendTransform(transform);
+
         }
 
 
@@ -117,6 +162,7 @@ namespace gazebo
         physics::Joint_V joints;
         common::PID pid;
         ignition::math::Pose3d pose;
+        double lidarSpeed;
 
         // Pointer to the update event connection
         event::ConnectionPtr updateConnection;
@@ -135,6 +181,9 @@ namespace gazebo
 
         // publish the pose
         ros::Publisher posePub;
+
+        // transform broadcaster
+        tf2_ros::TransformBroadcaster br;
         
   };
 
