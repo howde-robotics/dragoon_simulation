@@ -53,19 +53,29 @@ Visualization Manager:
       Reference Frame: <Fixed Frame>
       Value: true
     - Class: rviz/TF
-      Enabled: false
+      Enabled: true
       Frame Timeout: 15
       Frames:
         All Enabled: true
+        dragoon_body:
+          Value: true
+        lidar:
+          Value: true
+        world:
+          Value: true
       Marker Scale: 1
       Name: TF
       Show Arrows: true
       Show Axes: true
       Show Names: true
       Tree:
-        {}
+        world:
+          dragoon_body:
+            {}
+          lidar:
+            {}
       Update Interval: 0
-      Value: false
+      Value: true
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
@@ -132,25 +142,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 3.7057595252990723
+      Distance: 1.5977822542190552
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 3.5046184062957764
-        Y: -4.7554545402526855
-        Z: 2.217745542526245
+        X: 3.4351859092712402
+        Y: -3.624236583709717
+        Z: 2.8659417629241943
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.5153979063034058
+      Pitch: 0.5603975057601929
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 0.9353832006454468
+      Yaw: 5.448569297790527
     Saved: ~
 Window Geometry:
   Displays:
