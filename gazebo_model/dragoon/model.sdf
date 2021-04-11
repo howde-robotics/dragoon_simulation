@@ -108,7 +108,7 @@
 			</sensor>
 		</link>
 
-		<joint type="fixed" name="lidar_revolute">
+		<joint type="fixed" name="lidar_fixed">
 			<pose> 0 0 0 0 0 0</pose>
 			<child> lidar </child>
 			<parent> chassis </parent>

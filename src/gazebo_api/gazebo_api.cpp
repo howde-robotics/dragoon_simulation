@@ -12,6 +12,9 @@
 #include "geometry_msgs/PoseStamped.h"
 #include "tf2_geometry_msgs/tf2_geometry_msgs.h"
 #include "tf2_ros/transform_broadcaster.h"
+#include "dragoon_messages/driveCmd.h"
+
+#define LIDAR_JOINT 0
 
 namespace gazebo
 {
@@ -77,7 +80,7 @@ namespace gazebo
             this->rosNode.reset(new ros::NodeHandle("gazebo_client"));
 
             // sub to the joint topic using some of the subscriber options availiable
-            ros::SubscribeOptions so = ros::SubscribeOptions::create<std_msgs::Float32MultiArray>("/" + this->model->GetName() + "/joint_commands", 1, boost::bind(&DragoonGazebo::jointCallback, this, _1), ros::VoidPtr(), &this->rosQueue);
+            ros::SubscribeOptions so = ros::SubscribeOptions::create<dragoon_messages::driveCmd>("/" + this->model->GetName() + "/joint_commands", 1, boost::bind(&DragoonGazebo::jointCallback, this, _1), ros::VoidPtr(), &this->rosQueue);
             this->jointSub = this->rosNode->subscribe(so);
 
             this->rosQueueThread = std::thread(std::bind(&DragoonGazebo::queueThread, this));
@@ -90,14 +93,13 @@ namespace gazebo
             // set pid
 
             this->pid = common::PID(propGain, derGain, intGain);
-
-
-        
         }
 
-        void jointCallback(const std_msgs::Float32MultiArrayConstPtr &msg)
+        void jointCallback(const dragoon_messages::driveCmd::ConstPtr &msg)
         {
-            this->setVelocity(msg->data);
+            // to simulate treads, force left and right wheels to be same speed
+            std::array<double, 4> speeds = {msg->left_wheels, msg->right_wheels, msg->left_wheels, msg->right_wheels};
+            this->setVelocity(speeds);
         }
 
         // a ros queue for messages
@@ -111,19 +113,16 @@ namespace gazebo
         }
 
         // set joint of one wheel for testing
-        void setVelocity(std::vector<float> speeds)
+        void setVelocity(std::array<double, 4> speeds)
         {
             // lidar joint is first, then wheel joints
             for (int i = 0; i < (int) this->joints.size();i++)
             {
                 
                 physics::JointPtr joint = this->joints[i];
-                // ROS_INFO_STREAM(joint->GetName());
-                if (joint->GetName() == "lidar_revolute"){
-                    joint->SetVelocity(0, 0.0);
-                }
-                else {
-                    double speed = speeds[i];
+                // skip the lidar joint
+                if (i > LIDAR_JOINT){
+                    double speed = speeds[i-1];
                     // apply P-controller to the joint
                     this->model->GetJointController()->SetVelocityPID(joint->GetScopedName(), this->pid);
                     this->model->GetJointController()->SetVelocityTarget(joint->GetScopedName(), speed);
