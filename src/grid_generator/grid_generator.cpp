@@ -1,35 +1,28 @@
 #include "grid_generator.h"
 
-int main (int argc, char**argv){
-
-    ros::init(argc, argv, "grid_generator_node");
-    ros::NodeHandle node("~");
-
-    std::string target_frame;
-    std::string source_frame;
+GridGenerator::GridGenerator() : privateNh_("~")
+{
 
     // get parameters to mess with the transform lookup
-    node.param<std::string>("target_frame", target_frame, "base_link");
-    node.param<std::string>("source_frame", source_frame, "base_link");
+    privateNh_.param<std::string>("map_frame", mapFrame_, "world");
 
-    tf2_ros::Buffer tfBuffer;
-    tf2_ros::TransformListener tfListener(tfBuffer);
+    // sub to the point cloud, publish the occ grid
+    cloudSub_ = nodeHandler_.subscribe<pcl::PCLPointCloud2>("/gazebo_api/lidar", 1, &GridGenerator::cloudCallback, this);
+    gridPub_ = nodeHandler_.advertise<nav_msgs::OccupancyGrid>("/dragoon/map", 2);
+    cloudPrimePub_ = nodeHandler_.advertise<pcl::PCLPointCloud2>("/dragoon/lidar", 2);
+}
 
-    ros::Rate rate(10);
+void GridGenerator::cloudCallback(const pcl::PCLPointCloud2ConstPtr & cloudMsg){
+    // point cloud is in the lidar frame
+    std::string cloudFrame = cloudMsg->header.frame_id;
+    
+}
 
-    while (node.ok()){
-        geometry_msgs::TransformStamped transformStamped;
-
-        try{
-            transformStamped = tfBuffer.lookupTransform(target_frame, source_frame, ros::Time(0));
-        }
-
-        catch (tf2::TransformException &ex) {
-            ROS_WARN("%s", ex.what());
-            ros::Duration(1.0).sleep();
-        }
-
-        rate.sleep();
+int main (int argc, char**argv){
+    ros::init(argc, argv, "grid_generator_node");
+    GridGenerator node;
+    while (ros::ok()){
+        ros::spinOnce();
     }
 
     return 0;

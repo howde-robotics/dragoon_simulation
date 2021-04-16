@@ -25,6 +25,8 @@ find_package(catkin REQUIRED COMPONENTS
   urdf
   dragoon_messages
   gazebo_ros
+  pcl_ros
+  pcl_conversions
 )
 
 catkin_package(CATKIN_DEPENDS
@@ -37,6 +39,8 @@ catkin_package(CATKIN_DEPENDS
   actionlib_msgs
   dragoon_messages
   gazebo_ros
+  pcl_ros
+  pcl_conversions
 )
 include_directories(
   ${Boost_INCLUDE_DIR} 
