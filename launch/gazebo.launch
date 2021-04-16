@@ -17,7 +17,7 @@
 
 	<!-- set up the visualization to interact with the simulation -->
 	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find dragoon_simulation)/rviz/dragoon.rviz" />
-		<node name="marker_node" pkg="dragoon_simulation" type="marker_node">
+	<node name="marker_node" pkg="dragoon_simulation" type="marker_node">
 		<param name="marker_frame" value="dragoon_body"/>
 	</node>
 </launch>

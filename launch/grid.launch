@@ -1,0 +1,11 @@
+<launch>
+
+    <arg name="target_frame" default="base_link"  doc="target frame for tf2 listener lookup"/>
+    <arg name="source_frame" default="base_link"  doc="source frame for tf2 listener lookup"/>
+
+    <!-- occupancy grid launcher -->
+	<node name="grid_generator" pkg="dragoon_simulation" type="grid_generator" output="screen">
+		<param name="target_frame" value="$(arg target_frame)"/>
+		<param name="source_frame" value="$(arg source_frame)"/>
+    </node>
+</launch>

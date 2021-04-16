@@ -59,6 +59,9 @@ target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
 add_executable(marker_node src/marker_draw/markers.cpp)
 target_link_libraries(marker_node ${catkin_LIBRARIES})
 
+add_executable(grid_generator src/grid_generator/grid_generator.cpp)
+target_link_libraries(grid_generator ${catkin_LIBRARIES})
+
 # if(CATKIN_ENABLE_TESTING)
 
 #   find_package(rostest REQUIRED)

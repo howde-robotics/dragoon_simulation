@@ -65,6 +65,4 @@ int main(int argc, char** argv){
     node.run();
     ros::spinOnce();
   return 0;
-
-    return 0;
 }
