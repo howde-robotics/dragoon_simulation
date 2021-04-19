@@ -1,9 +1,17 @@
 <launch>
 
-    <arg name="map_frame" default="world"  doc="target frame for occupancy grid map"/>
+    <arg name="map_frame"    default="world" doc="target frame for occupancy grid map"/>
+    <arg name="cloud_frame"  default="lidar" doc="source frame for occupancy grid map"/>
+    <arg name="map_width"    default="1000" doc="width of map"/>
+    <arg name="map_height"   default="1000" doc="height of map"/>
+    <arg name="map_res"      default="0.01" doc="resolution of map"/>
 
     <!-- occupancy grid launcher -->
 	<node name="grid_generator" pkg="dragoon_simulation" type="grid_generator" output="screen">
-		<param name="map_frame" value="$(arg map_frame)"/>
+        <param name="map_frame"    value="$(arg map_frame)"/>
+        <param name="cloud_frame"  value="$(arg cloud_frame)"/>
+        <param name="map_width"    value="$(arg map_width)"/>
+        <param name="map_height"   value="$(arg map_height)"/>
+        <param name="map_res"      value="$(arg map_res)"/>
     </node>
 </launch>
