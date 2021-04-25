@@ -134,17 +134,21 @@ void GridGenerator::placePointOnGrid(const pcl::PointXYZ & point){
     double y  = std::round(point.y/mapRes_)*mapRes_;
     int i     = x /mapRes_;
     int j     = y /mapRes_;
-    int a     = convertToIndex(j, i, mapW_);
     int lowLim = 0;
     int highLim = mapData_.size();
 
-    if (verbose_){
-        ROS_INFO_STREAM("x: " << x << " y: " << y << " i: " << i << " j: " << j << " index: " << a);
-    }
+
 
     // set the appropriate map values to increase by a certain amount
-    if (a >= lowLim && a < highLim){
+    if (i >= 0 && i < mapH_ && j >= 0 && j < mapW_){
+        // compute the index 
+        int a = convertToIndex(j, i, mapW_);
+        
         mapData_[a] += 10;
+
+        if (verbose_){
+            ROS_INFO_STREAM("x: " << x << " y: " << y << " i: " << i << " j: " << j << " index: " << a);
+        }
     }
 }
 

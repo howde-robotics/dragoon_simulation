@@ -9,6 +9,7 @@
 		<!-- <arg name="world_name" value="$(find dragoon_simulation)/worlds/dragoon_rubble.world"/> -->
 		<!-- <arg name="world_name" value="$(find dragoon_simulation)/worlds/dragoon_gas.world"/> -->
 		<arg name="world_name" value="$(find dragoon_simulation)/worlds/dragoon_training.world"/>
+		<!-- <arg name="world_name" value="$(find dragoon_simulation)/worlds/dragoon_grid_test.world"/> -->
 		<arg name="verbose" value="false"/>
 	</include>
 
