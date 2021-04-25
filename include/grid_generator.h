@@ -19,18 +19,21 @@ class GridGenerator
     private:
         // map data
         std::string mapFrame_, cloudFrame_;
-        geometry_msgs::TransformStamped mapTransform_;
+        geometry_msgs::TransformStamped cloudToMap_;
+        geometry_msgs::TransformStamped mapToWorld_;
         geometry_msgs::Pose mapPose_;
         int mapH_;
         int mapW_;
         double mapRes_;
         std::vector<int8_t> mapData_;
         nav_msgs::OccupancyGrid mapMsg_, lastMapMsg_;
+        bool verbose_;
 
         // ros stuff
         ros::NodeHandle nodeHandler_, privateNh_;
         ros::Publisher gridPub_, cloudPrimePub_;
         ros::Subscriber cloudSub_;
+        tf2_ros::TransformBroadcaster tfBroadcaster_;
 
     public:
         GridGenerator();
@@ -76,6 +79,17 @@ class GridGenerator
          * @brief Constructs the occupancy grid based off of the 2D point cloud
          *
          */
-        void constructOccGrid();
+        void constructOccGrid(const pcl::PCLPointCloud2ConstPtr &cloudIn);
 
+        /**
+         * @brief Converts matrix i,j indices into an index of an array that can be indexed
+         *
+         */
+        int convertToIndex(int i, int j, int columns); 
+
+        /**
+         * @brief Converts matrix i,j indices into an index of an array that can be indexed
+         *
+         */
+        void placePointOnGrid(const pcl::PointXYZ & point);
 };

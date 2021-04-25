@@ -65,6 +65,10 @@ target_link_libraries(marker_node ${catkin_LIBRARIES})
 
 add_executable(grid_generator src/grid_generator/grid_generator.cpp)
 target_link_libraries(grid_generator ${catkin_LIBRARIES})
+target_compile_options(grid_generator PRIVATE -Ofast)
+
+add_executable(map_frame_broadcaster src/grid_generator/map_frame_broadcaster.cpp)
+target_link_libraries(map_frame_broadcaster ${catkin_LIBRARIES})
 
 # if(CATKIN_ENABLE_TESTING)
 

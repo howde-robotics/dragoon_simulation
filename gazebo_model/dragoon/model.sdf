@@ -81,7 +81,7 @@
 					<range>
 
 						<!-- Minimum distance of the beam -->
-						<min>0.12</min>
+						<min>0.25</min>
 
 						<!-- Maximum distance of the beam -->
 						<max>70</max>

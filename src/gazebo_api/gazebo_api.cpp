@@ -170,16 +170,16 @@ namespace gazebo
 
             // publish lidar joint transform
             transformLIDAR.header.stamp = ros::Time::now();
-            transform.header.frame_id = "world";
-            transform.child_frame_id = "lidar";
-            transform.transform.translation.x = pos.X();
-            transform.transform.translation.y = pos.Y();
-            transform.transform.translation.z = pos.Z();
-            transform.transform.rotation.x = rot.X();
-            transform.transform.rotation.y = rot.Y();
-            transform.transform.rotation.z = rot.Z();
-            transform.transform.rotation.w = rot.W();
-            this->br.sendTransform(transform);
+            transformLIDAR.header.frame_id = "world";
+            transformLIDAR.child_frame_id = "lidar";
+            transformLIDAR.transform.translation.x = pos.X();
+            transformLIDAR.transform.translation.y = pos.Y();
+            transformLIDAR.transform.translation.z = pos.Z();
+            transformLIDAR.transform.rotation.x = rot.X();
+            transformLIDAR.transform.rotation.y = rot.Y();
+            transformLIDAR.transform.rotation.z = rot.Z();
+            transformLIDAR.transform.rotation.w = rot.W();
+            this->br.sendTransform(transformLIDAR);
 
             // encoder publish the left top and the right bottom wheel
             std_msgs::Float32MultiArray outEncoders;
